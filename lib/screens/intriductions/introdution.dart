@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quizzybea_in/screens/auth/login_page.dart';
 import 'package:quizzybea_in/screens/home/home.dart';
 import 'package:quizzybea_in/widgets/introductionscreens/intropage1.dart';
 import 'package:quizzybea_in/widgets/introductionscreens/intropage2.dart';
@@ -95,7 +96,7 @@ class _IntroductionState extends State<Introduction> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => HomePage()));
+                                    builder: (context) => LoginPage()));
                           },
                           child: Container(
                               height: 30,

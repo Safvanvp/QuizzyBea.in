@@ -9,34 +9,66 @@ class Splash extends StatefulWidget {
   State<Splash> createState() => _SplashState();
 }
 
-class _SplashState extends State<Splash> {
+class _SplashState extends State<Splash> with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _animation;
+
   @override
   void initState() {
     super.initState();
+
+    // Animation setup
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 1000),
+      vsync: this,
+    );
+
+    _animation = CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeIn,
+    );
+
+    _controller.forward();
+
+    // Redirect after animation delay
     redirect();
+  }
+
+  Future<void> redirect() async {
+    await Future.delayed(const Duration(milliseconds: 1800));
+    Navigator.of(context).pushReplacement(
+      PageRouteBuilder(
+        transitionDuration: const Duration(milliseconds: 600),
+        pageBuilder: (_, __, ___) => const Introduction(),
+        transitionsBuilder: (_, animation, __, child) {
+          return FadeTransition(
+            opacity: animation,
+            child: child,
+          );
+        },
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: SizedBox(
-          child: Image.asset(AppImages.logo),
+        child: FadeTransition(
+          opacity: _animation,
+          child: SizedBox(
+            width: 200,
+            height: 200,
+            child: Image.asset(AppImages.logo),
+          ),
         ),
       ),
     );
-  }
-
-  Future<void> redirect() async {
-    await Future.delayed(const Duration(milliseconds: 500));
-
-    {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (BuildContext context) => const Introduction(),
-        ),
-      );
-    }
   }
 }

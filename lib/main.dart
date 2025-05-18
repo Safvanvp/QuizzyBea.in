@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quizzybea_in/screens/auth/login_page.dart';
 import 'package:quizzybea_in/screens/splash/splash.dart';
 import 'package:quizzybea_in/theme/colors.dart';
 
@@ -15,7 +16,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Quizzy Beea.in',
       theme: ThemeData(scaffoldBackgroundColor: AppColors.primary),
-      home: const Splash(),
+      home: LoginPage(),
     );
   }
 }
