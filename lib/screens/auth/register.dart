@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:quizzybea_in/assets/animation.dart';
+import 'package:quizzybea_in/widgets/components/my_button.dart';
 import 'package:quizzybea_in/widgets/components/my_textfield.dart';
 
 class Register extends StatelessWidget {
@@ -20,14 +21,14 @@ class Register extends StatelessWidget {
             key: _registerKey,
             child: Column(
               children: [
-                Lottie.asset(AppAnimations.login, height: 300),
+                Lottie.asset(AppAnimations.login, height: 350),
                 const Text('Login',
                     style: TextStyle(
                         fontSize: 30,
                         fontWeight: FontWeight.bold,
                         color: Colors.black87)),
                 const SizedBox(
-                  height: 10,
+                  height: 20,
                 ),
                 const Text('Welcome back, please login to your account',
                     style: TextStyle(
@@ -35,7 +36,7 @@ class Register extends StatelessWidget {
                         fontWeight: FontWeight.w400,
                         color: Colors.black87)),
                 const SizedBox(
-                  height: 20,
+                  height: 40,
                 ),
                 MyTextfield(
                   hintText: 'Email',
@@ -84,6 +85,37 @@ class Register extends StatelessWidget {
                       }
                       return null;
                     }),
+                const SizedBox(
+                  height: 30,
+                ),
+                MyButton(onTap: () {}, text: 'Sign Up'),
+                const SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text("Don’t have a account?,",
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.onSurface,
+                          fontSize: 16,
+                        )),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Register()));
+                      },
+                      child: Text('Register now',
+                          style: TextStyle(
+                            color: Colors.black54,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          )),
+                    )
+                  ],
+                ),
               ],
             )),
       ),
