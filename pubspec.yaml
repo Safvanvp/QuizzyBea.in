@@ -20,6 +20,9 @@ dependencies:
   cupertino_icons: ^1.0.8
   smooth_page_indicator: 
   lottie:
+  firebase_core:
+  firebase_auth:
+  cloud_firestore:
 
 dev_dependencies:
   flutter_test:

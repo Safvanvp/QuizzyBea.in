@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "116284519607",
+    "project_id": "quizzybea",
+    "storage_bucket": "quizzybea.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:116284519607:android:50d6b1de488de14eac8932",
+        "android_client_info": {
+          "package_name": "com.example.quizzybea_in"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBEX4v-nZ1bEvXmofKf-KCIYTjWznIDr6U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

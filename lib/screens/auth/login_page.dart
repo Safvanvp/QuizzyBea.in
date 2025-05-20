@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:quizzybea_in/assets/animation.dart';
+import 'package:quizzybea_in/assets/images.dart';
 import 'package:quizzybea_in/widgets/components/my_button.dart';
+import 'package:quizzybea_in/widgets/components/my_logi_providers.dart';
 import 'package:quizzybea_in/widgets/components/my_textfield.dart';
 
 class LoginPage extends StatelessWidget {
@@ -17,7 +19,7 @@ class LoginPage extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Lottie.asset(AppAnimations.login, height: 400),
+              Lottie.asset(AppAnimations.login, height: 300),
               const Text('Login',
                   style: TextStyle(
                       fontSize: 30,
@@ -112,6 +114,22 @@ class LoginPage extends StatelessWidget {
                     indent: 20,
                   )),
                 ],
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Row(
+                children: [
+                  Expanded(
+                      child: MyLoginproviders(
+                          providername: 'Google', image: AppImages.google)),
+                  Expanded(
+                      child: MyLoginproviders(
+                          providername: 'Apple', image: AppImages.apple))
+                ],
+              ),
+              const SizedBox(
+                height: 20,
               ),
             ],
           ),
