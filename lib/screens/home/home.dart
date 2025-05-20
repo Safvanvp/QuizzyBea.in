@@ -2,14 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:quizzybea_in/assets/images.dart';
 import 'package:quizzybea_in/theme/colors.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class HomePage extends StatelessWidget {
+  HomePage({super.key});
 
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
   final List<Map<String, String>> categories = [
     {"title": "General Knowledge", "background": AppImages.cardBg1},
     {"title": "Music & Poetry", "background": AppImages.cardBg2},

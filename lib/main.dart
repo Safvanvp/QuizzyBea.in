@@ -1,7 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:quizzybea_in/firebase_options.dart';
-import 'package:quizzybea_in/screens/auth/login_page.dart';
+import 'package:quizzybea_in/services/auth/auth_gate.dart';
+
 
 import 'package:quizzybea_in/theme/colors.dart';
 
@@ -22,7 +23,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Quizzy Beea.in',
       theme: ThemeData(scaffoldBackgroundColor: AppColors.primary),
-      home: LoginPage(),
+      home: AuthGate(),
     );
   }
 }
