@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quizzybea_in/screens/auth/login_page.dart';
-import 'package:quizzybea_in/screens/splash/splash.dart';
+
 import 'package:quizzybea_in/theme/colors.dart';
 
 void main() {
