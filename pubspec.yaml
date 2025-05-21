@@ -22,6 +22,8 @@ dependencies:
   firebase_core:
   firebase_auth:
   cloud_firestore:
+  shimmer:
+  liquid_pull_to_refresh:
 
 dev_dependencies:
   flutter_test:

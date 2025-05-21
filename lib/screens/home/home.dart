@@ -65,7 +65,6 @@ class _HomePageState extends State<HomePage> {
       ),
       drawer: MyDrawer(
         userData: _userData,
-        
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
@@ -123,12 +122,11 @@ class _HomePageState extends State<HomePage> {
             Text(
               'Categories',
               style: TextStyle(
-                fontSize: 20,
+                fontSize: 16,
                 fontWeight: FontWeight.bold,
                 color: AppColors.darckbg,
               ),
             ),
-            const SizedBox(height: 10),
             const Divider(thickness: 2, color: Colors.black),
             const SizedBox(height: 20),
             Expanded(
