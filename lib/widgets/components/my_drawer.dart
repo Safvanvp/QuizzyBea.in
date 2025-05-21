@@ -4,7 +4,8 @@ import 'package:quizzybea_in/services/auth/auth_services.dart';
 import 'package:quizzybea_in/theme/colors.dart';
 
 class MyDrawer extends StatelessWidget {
-  MyDrawer({super.key});
+  final Map<String, dynamic>? userData;
+  MyDrawer({super.key, required this.userData});
 
   final AuthServices _authServices = AuthServices();
 
@@ -20,10 +21,15 @@ class MyDrawer extends StatelessWidget {
       backgroundColor: AppColors.primary,
       child: Column(
         children: [
-          const DrawerHeader(
+          DrawerHeader(
               child: Column(
             children: [
-              Icon(Icons.account_circle, size: 100, color: AppColors.darckbg),
+              Icon(Icons.account_circle, size: 80, color: AppColors.darckbg),
+              Text(
+                userData?['name'] ?? 'Loading...',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              Text('${userData?['email'] ?? 'Loading...'}'),
             ],
           )),
           Padding(
