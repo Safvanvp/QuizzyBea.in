@@ -3,6 +3,7 @@ import 'package:lottie/lottie.dart';
 import 'package:quizzybea_in/assets/animation.dart';
 import 'package:quizzybea_in/assets/images.dart';
 import 'package:quizzybea_in/screens/auth/register.dart';
+import 'package:quizzybea_in/screens/home/home.dart';
 import 'package:quizzybea_in/services/auth/auth_services.dart';
 import 'package:quizzybea_in/widgets/components/my_button.dart';
 import 'package:quizzybea_in/widgets/components/my_logi_providers.dart';
@@ -23,6 +24,9 @@ class LoginPage extends StatelessWidget {
         emailController.text.trim(),
         passwordController.text.trim(),
       );
+      //navigate to home page
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => HomePage()));
       print("Login successful!");
     } catch (e) {
       print("Login error: $e");

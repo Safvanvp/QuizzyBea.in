@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:quizzybea_in/firebase_options.dart';
 import 'package:quizzybea_in/services/auth/auth_gate.dart';
 
-
 import 'package:quizzybea_in/theme/colors.dart';
 
 void main() async {

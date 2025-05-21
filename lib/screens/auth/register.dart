@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:quizzybea_in/assets/animation.dart';
+import 'package:quizzybea_in/screens/auth/login_page.dart';
+import 'package:quizzybea_in/services/auth/auth_services.dart';
 import 'package:quizzybea_in/widgets/components/my_button.dart';
 import 'package:quizzybea_in/widgets/components/my_textfield.dart';
 
@@ -9,9 +11,32 @@ class Register extends StatelessWidget {
 
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
   final TextEditingController confirmPasswordController =
       TextEditingController();
   final _registerKey = GlobalKey<FormState>();
+
+  Future<void> register(BuildContext context) async {
+    final authServices = AuthServices();
+    try {
+      await authServices.signUpWithEmailAndPassword(
+          emailController.text, passwordController.text, nameController.text);
+    } catch (e) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Signup Failed'),
+          content: Text(e.toString()),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +47,7 @@ class Register extends StatelessWidget {
             child: Column(
               children: [
                 Lottie.asset(AppAnimations.login, height: 350),
-                const Text('Login',
+                const Text('Sign Up',
                     style: TextStyle(
                         fontSize: 30,
                         fontWeight: FontWeight.bold,
@@ -30,7 +55,7 @@ class Register extends StatelessWidget {
                 const SizedBox(
                   height: 20,
                 ),
-                const Text('Welcome back, please login to your account',
+                const Text('Create an account to get started',
                     style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w400,
@@ -53,6 +78,19 @@ class Register extends StatelessWidget {
                     return null;
                   },
                 ),
+                const SizedBox(
+                  height: 20,
+                ),
+                MyTextfield(
+                    hintText: 'Name',
+                    obscureText: false,
+                    controller: nameController,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Name is required';
+                      }
+                      return null;
+                    }),
                 const SizedBox(
                   height: 20,
                 ),
@@ -88,7 +126,27 @@ class Register extends StatelessWidget {
                 const SizedBox(
                   height: 30,
                 ),
-                MyButton(onTap: () {}, text: 'Sign Up'),
+                MyButton(
+                    onTap: () {
+                      if (_registerKey.currentState!.validate()) {
+                        register(context);
+                      } else {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: const Text('Login Failed'),
+                            content: const Text('Please fill all fields'),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.of(context).pop(),
+                                child: const Text('OK'),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
+                    },
+                    text: 'Sign Up'),
                 const SizedBox(
                   height: 20,
                 ),
@@ -105,10 +163,10 @@ class Register extends StatelessWidget {
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => Register()));
+                                builder: (context) => LoginPage()));
                       },
-                      child: Text('Register now',
-                          style: TextStyle(
+                      child: const Text('Signup now',
+                          style: const TextStyle(
                             color: Colors.black54,
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
