@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quizzybea_in/screens/history/user_quiz_history.dart';
 import 'package:quizzybea_in/services/auth/auth_gate.dart';
 import 'package:quizzybea_in/services/auth/auth_services.dart';
 import 'package:quizzybea_in/theme/colors.dart';
@@ -61,13 +62,15 @@ class MyDrawer extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(left: 20),
             child: ListTile(
-              leading: const Icon(Icons.info, color: AppColors.darckbg),
+              leading: const Icon(Icons.history, color: AppColors.darckbg),
               title: const Text(
-                'About',
+                'History',
                 style: TextStyle(color: AppColors.darckbg),
               ),
               onTap: () {
-                Navigator.pop(context);
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return const UserQuizHistoryPage();
+                }));
               },
             ),
           ),
