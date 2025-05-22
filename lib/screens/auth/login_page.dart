@@ -50,6 +50,37 @@ class LoginPage extends StatelessWidget {
     }
   }
 
+  //google sign in function
+  Future<void> googleSignIn(BuildContext context) async {
+    final authServices = AuthServices();
+    try {
+      await authServices.signInWithGoogle();
+      //navigate to home page
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => HomePage(),
+        ),
+      );
+      print("Login successful!");
+    } catch (e) {
+      print("Login error: $e");
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Login Failed'),
+          content: Text(e.toString()),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,7 +91,7 @@ class LoginPage extends StatelessWidget {
             // autovalidateMode: AutovalidateMode.onUserInteraction,
             child: Column(
               children: [
-                Lottie.asset(AppAnimations.login, height: 300),
+                Lottie.asset('Assets/lottie/login.json', height: 300),
                 const Text('Login',
                     style: TextStyle(
                         fontSize: 30,
@@ -195,8 +226,11 @@ class LoginPage extends StatelessWidget {
                 Row(
                   children: [
                     Expanded(
-                        child: MyLoginproviders(
-                            providername: 'Google', image: AppImages.google)),
+                        child: GestureDetector(
+                      onTap: () => googleSignIn(context),
+                      child: MyLoginproviders(
+                          providername: 'Google', image: AppImages.google),
+                    )),
                     Expanded(
                         child: MyLoginproviders(
                             providername: 'Apple', image: AppImages.apple))

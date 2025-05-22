@@ -49,7 +49,7 @@ class Register extends StatelessWidget {
             key: _registerKey,
             child: Column(
               children: [
-                Lottie.asset(AppAnimations.login, height: 350),
+                Lottie.asset('Assets/lottie/login.json', height: 350),
                 const Text('Sign Up',
                     style: TextStyle(
                         fontSize: 30,

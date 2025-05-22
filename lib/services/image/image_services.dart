@@ -3,7 +3,6 @@ import 'dart:io' show File;
 import 'dart:typed_data';
 
 import 'package:http/http.dart' as http;
-import 'package:flutter/foundation.dart' show kIsWeb;
 
 class ImgbbService {
   final String _apiKey = 'YOUR_IMGBB_API_KEY';

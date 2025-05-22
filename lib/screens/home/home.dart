@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:quizzybea_in/assets/images.dart';
-import 'package:quizzybea_in/screens/quizz_screen.dart/quizz_screen.dart';
-import 'package:quizzybea_in/services/auth/auth_gate.dart';
+import 'package:quizzybea_in/screens/quizz/quizz_screen.dart';
+
 import 'package:quizzybea_in/services/auth/auth_services.dart';
 import 'package:quizzybea_in/theme/colors.dart';
 import 'package:quizzybea_in/widgets/components/my_card.dart';

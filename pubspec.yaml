@@ -21,7 +21,9 @@ dependencies:
   lottie:
   firebase_core:
   firebase_auth:
+  google_sign_in:
   cloud_firestore:
+  provider:
   shimmer:
   liquid_pull_to_refresh:
   http:
@@ -47,6 +49,7 @@ flutter:
   assets:
     - Assets/images/
     - Assets/lottie/
+    - Assets/productimages/
 
 
   # fonts:

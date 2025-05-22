@@ -70,6 +70,6 @@ class MyCard extends StatelessWidget {
         ],
       ),
     );
-    ;
+    
   }
 }

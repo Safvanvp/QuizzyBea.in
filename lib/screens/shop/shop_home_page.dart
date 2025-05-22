@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:quizzybea_in/screens/shop/cart.dart';
-import 'package:quizzybea_in/screens/shop/shop.dart';
+import 'package:quizzybea_in/screens/shop/cart_page.dart';
+import 'package:quizzybea_in/screens/shop/shop_page.dart';
 
 import 'package:quizzybea_in/widgets/components/my_bottom_nav.dart';
 import 'package:quizzybea_in/widgets/components/my_drawer.dart';
@@ -18,10 +18,8 @@ class _ShopHomePageState extends State<ShopHomePage> {
 
   final List<Widget> _pages = [
     const Shop(),
-    const Cart(),
+    const CartPage(),
   ];
-
-  
 
   void navigateBottomNav(int index) {
     setState(() {
@@ -31,8 +29,6 @@ class _ShopHomePageState extends State<ShopHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final userName = _userData?['name'] ?? 'User';
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -45,7 +41,7 @@ class _ShopHomePageState extends State<ShopHomePage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Greeting message
-          
+
           // Page content
           Expanded(child: _pages[_selectedIndex]),
         ],

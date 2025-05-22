@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quizzybea_in/screens/history/user_quiz_history.dart';
+import 'package:quizzybea_in/screens/home/home.dart';
 import 'package:quizzybea_in/screens/settings/settings_page.dart';
 import 'package:quizzybea_in/screens/shop/shop_home_page.dart';
 import 'package:quizzybea_in/services/auth/auth_gate.dart';
@@ -44,7 +45,9 @@ class MyDrawer extends StatelessWidget {
                 style: TextStyle(color: AppColors.darckbg),
               ),
               onTap: () {
-                Navigator.pop(context);
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
+                  return HomePage();
+                }));
               },
             ),
           ),

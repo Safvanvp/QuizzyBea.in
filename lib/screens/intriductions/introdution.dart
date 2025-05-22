@@ -45,7 +45,7 @@ class _IntroductionState extends State<Introduction> {
 
           // Skip Button (top right)
           Positioned(
-            top: 40,
+            top: 60,
             right: 20,
             child: GestureDetector(
               onTap: goToLoginPage,
