@@ -25,7 +25,12 @@ class LoginPage extends StatelessWidget {
         passwordController.text.trim(),
       );
       //navigate to home page
-
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => HomePage(),
+        ),
+      );
       print("Login successful!");
     } catch (e) {
       print("Login error: $e");

@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AuthServices {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   //signin
   Future<UserCredential> signInWithEmailAndPassword(
@@ -14,7 +14,7 @@ class AuthServices {
         password: password,
       );
       //save user data to firestore
-      _firestore.collection('users').doc(userCredential.user!.uid).set({
+      firestore.collection('users').doc(userCredential.user!.uid).set({
         'uid': userCredential.user!.uid,
         'email': email,
         'name': userCredential.user!.displayName,
@@ -46,7 +46,7 @@ class AuthServices {
         await userCredential.user!.updateDisplayName(name);
 
         //save user data to firestore
-        _firestore.collection('users').doc(userCredential.user!.uid).set({
+        firestore.collection('users').doc(userCredential.user!.uid).set({
           'name': name,
           'email': email,
           'uid': userCredential.user!.uid,
