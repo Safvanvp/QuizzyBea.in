@@ -27,6 +27,7 @@ dependencies:
   http:
   image_picker: 
   image_picker_web:  
+  google_nav_bar: 
 
 
 dev_dependencies:

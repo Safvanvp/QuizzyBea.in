@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:quizzybea_in/screens/history/user_quiz_history.dart';
 import 'package:quizzybea_in/screens/settings/settings_page.dart';
+import 'package:quizzybea_in/screens/shop/shop_home_page.dart';
 import 'package:quizzybea_in/services/auth/auth_gate.dart';
 import 'package:quizzybea_in/services/auth/auth_services.dart';
 import 'package:quizzybea_in/theme/colors.dart';
@@ -39,7 +40,7 @@ class MyDrawer extends StatelessWidget {
             child: ListTile(
               leading: const Icon(Icons.home, color: AppColors.darckbg),
               title: const Text(
-                'Home',
+                'H O M E',
                 style: TextStyle(color: AppColors.darckbg),
               ),
               onTap: () {
@@ -52,7 +53,7 @@ class MyDrawer extends StatelessWidget {
             child: ListTile(
               leading: const Icon(Icons.settings, color: AppColors.darckbg),
               title: const Text(
-                'Settings',
+                'S E T T I N G S',
                 style: TextStyle(color: AppColors.darckbg),
               ),
               onTap: () {
@@ -65,9 +66,26 @@ class MyDrawer extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(left: 20),
             child: ListTile(
+              leading:
+                  const Icon(Icons.shopping_cart, color: AppColors.darckbg),
+              title: const Text(
+                'S H O P',
+                style: TextStyle(color: AppColors.darckbg),
+              ),
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return const ShopHomePage();
+                }));
+              },
+            ),
+          ),
+
+          Padding(
+            padding: const EdgeInsets.only(left: 20),
+            child: ListTile(
               leading: const Icon(Icons.history, color: AppColors.darckbg),
               title: const Text(
-                'History',
+                'H I S T O R Y',
                 style: TextStyle(color: AppColors.darckbg),
               ),
               onTap: () {

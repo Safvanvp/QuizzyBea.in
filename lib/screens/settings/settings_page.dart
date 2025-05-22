@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:quizzybea_in/screens/settings/edit_profile_page.dart';
+import 'package:quizzybea_in/services/auth/auth_gate.dart';
 import 'package:quizzybea_in/services/auth/auth_services.dart';
 import 'package:quizzybea_in/services/image/image_services.dart';
 
@@ -15,6 +16,14 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
+  final AuthServices _authServices = AuthServices();
+
+  void _logout(BuildContext context) async {
+    _authServices.signOut();
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => const AuthGate()));
+  }
+
   bool isDarkMode = false;
   bool notificationsEnabled = true;
 
@@ -233,10 +242,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   leading: const Icon(Icons.logout, color: Colors.red),
                   title:
                       const Text('Logout', style: TextStyle(color: Colors.red)),
-                  onTap: () async {
-                    await AuthServices().signOut();
-                    // TODO: Navigate to login screen
-                  },
+                  onTap: () => _logout(context),
                 ),
               ],
             ),

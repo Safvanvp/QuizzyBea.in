@@ -23,14 +23,26 @@ class _Intropage1State extends State<Intropage1> {
             SizedBox(
               height: 50,
             ),
+            Text(
+              "Fun begins with learning!",
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.deepPurple,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(
+              height: 20,
+            ),
             Container(
               width: MediaQuery.of(context).size.width / 1.5,
               child: Text(
-                'This is a app for improving your knowledge in general knowledge...  ',
+                "Welcome to QuizzyBea – where play and education meet for little champions.",
                 style: TextStyle(
-                    fontSize: 17,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.black),
+                  fontSize: 16,
+                  color: Colors.black54,
+                ),
                 textAlign: TextAlign.center,
               ),
             )

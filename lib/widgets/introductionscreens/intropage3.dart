@@ -21,16 +21,28 @@ class _Intropage3State extends State<Intropage3> {
           children: [
             Container(child: Lottie.asset('Assets/lottie/page_3.json')),
             SizedBox(
-              height: 50,
+              height: 30,
+            ),
+            Text(
+              "Explore puzzles, books & more",
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.deepPurple,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(
+              height: 20,
             ),
             Container(
               width: MediaQuery.of(context).size.width / 1.5,
               child: Text(
-                'In this app you can share your knowledge to avryone...',
+                'Your one-stop shop for kids’ brain boosters and fun learning kits.',
                 style: TextStyle(
-                    fontSize: 17,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.black),
+                  fontSize: 16,
+                  color: Colors.black54,
+                ),
                 textAlign: TextAlign.center,
               ),
             )

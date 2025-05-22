@@ -23,14 +23,26 @@ class _Intropage2State extends State<Intropage2> {
             SizedBox(
               height: 80,
             ),
+            Text(
+              "Boost your kid's IQ daily",
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.deepPurple,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(
+              height: 20,
+            ),
             Container(
               width: MediaQuery.of(context).size.width / 1.5,
               child: Text(
-                'This is a app can easly upgrade social status...  ',
+                'Get access to puzzles and tools that improve memory and logic.',
                 style: TextStyle(
-                    fontSize: 17,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.black),
+                  fontSize: 16,
+                  color: Colors.black54,
+                ),
                 textAlign: TextAlign.center,
               ),
             )

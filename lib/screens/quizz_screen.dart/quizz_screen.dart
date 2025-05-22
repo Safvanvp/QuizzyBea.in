@@ -2,13 +2,13 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:quizzybea_in/models/AstroScience_Questions.dart';
-import 'package:quizzybea_in/models/Chemistry_Questions.dart';
-import 'package:quizzybea_in/models/Geopolitics_Questions.dart';
-import 'package:quizzybea_in/models/History_Questions.dart';
-import 'package:quizzybea_in/models/Music_and_Poetry.dart';
-import 'package:quizzybea_in/models/general_knoledge.dart';
-import 'package:quizzybea_in/models/science_question.dart';
+import 'package:quizzybea_in/models/quizz/AstroScience_Questions.dart';
+import 'package:quizzybea_in/models/quizz/Chemistry_Questions.dart';
+import 'package:quizzybea_in/models/quizz/Geopolitics_Questions.dart';
+import 'package:quizzybea_in/models/quizz/History_Questions.dart';
+import 'package:quizzybea_in/models/quizz/Music_and_Poetry.dart';
+import 'package:quizzybea_in/models/quizz/general_knoledge.dart';
+import 'package:quizzybea_in/models/quizz/science_question.dart';
 import 'package:quizzybea_in/services/quizz/quiz_service.dart';
 
 class QuizzScreen extends StatefulWidget {

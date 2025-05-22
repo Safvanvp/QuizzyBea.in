@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:quizzybea_in/assets/animation.dart';
 import 'package:quizzybea_in/screens/auth/login_page.dart';
+import 'package:quizzybea_in/screens/home/home.dart';
 import 'package:quizzybea_in/services/auth/auth_services.dart';
 import 'package:quizzybea_in/widgets/components/my_button.dart';
 import 'package:quizzybea_in/widgets/components/my_textfield.dart';
@@ -21,6 +22,8 @@ class Register extends StatelessWidget {
     try {
       await authServices.signUpWithEmailAndPassword(
           emailController.text, passwordController.text, nameController.text);
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => HomePage()));
     } catch (e) {
       showDialog(
         context: context,
@@ -134,7 +137,7 @@ class Register extends StatelessWidget {
                         showDialog(
                           context: context,
                           builder: (context) => AlertDialog(
-                            title: const Text('Login Failed'),
+                            title: const Text('Signup Failed'),
                             content: const Text('Please fill all fields'),
                             actions: [
                               TextButton(
