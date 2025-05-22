@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:quizzybea_in/services/auth/auth_services.dart';
+import 'package:quizzybea_in/widgets/components/my_product_tile.dart';
 
 class Shop extends StatefulWidget {
   const Shop({super.key});
@@ -67,7 +69,41 @@ class _ShopState extends State<Shop> {
               fillColor: Colors.grey.shade200,
             ),
           ),
-        )
+        ),
+        SizedBox(
+          height: 20,
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 20,
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('Hot Picks',
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black)),
+              Text('See All',
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.grey.shade700)),
+            ],
+          ),
+        ),
+        //hot picks
+        SizedBox(
+          height: 20,
+        ),
+        Expanded(child: ListView.builder(
+          itemBuilder: (context, index) {
+            // return MyProductTile(
+
+            // );
+          },
+        ))
       ],
     );
   }
