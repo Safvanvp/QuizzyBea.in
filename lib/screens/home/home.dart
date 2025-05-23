@@ -42,7 +42,6 @@ class _HomePageState extends State<HomePage> {
   final List<Map<String, String>> categories = [
     {"title": "General Knowledge", "background": AppImages.cardBg1},
     {"title": "Music & Poetry", "background": AppImages.cardBg2},
-    {"title": "Geopolitics", "background": AppImages.cardBg3},
     {"title": "Astro science", "background": AppImages.cardBg4},
     {"title": "Chemistry", "background": AppImages.cardBg5},
     {"title": "History", "background": AppImages.cardBg6},
@@ -115,7 +114,37 @@ class _HomePageState extends State<HomePage> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  Icon(Icons.person, color: AppColors.white, size: 50),
+                  if (_userData != null)
+                    _userData!['photoUrl'] != null &&
+                            _userData!['photoUrl'].toString().isNotEmpty
+                        ? ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Image.network(
+                              _userData!['photoUrl'],
+                              width: 70,
+                              height: 70,
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) {
+                                return Container(
+                                  width: 70,
+                                  height: 70,
+                                  color: Colors.white,
+                                  child: Icon(Icons.person,
+                                      size: 40, color: AppColors.darckbg),
+                                );
+                              },
+                            ),
+                          )
+                        : Container(
+                            width: 70,
+                            height: 70,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Icon(Icons.person,
+                                size: 40, color: AppColors.darckbg),
+                          )
                 ],
               ),
             ),

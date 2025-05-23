@@ -28,7 +28,19 @@ class MyDrawer extends StatelessWidget {
           DrawerHeader(
               child: Column(
             children: [
-              Icon(Icons.account_circle, size: 80, color: AppColors.darckbg),
+              CircleAvatar(
+                radius: 40,
+                backgroundColor: Colors.white,
+                backgroundImage: (userData?['photoUrl'] != null &&
+                        userData!['photoUrl'].toString().isNotEmpty)
+                    ? NetworkImage(userData!['photoUrl'])
+                    : null,
+                child: (userData?['photoUrl'] == null ||
+                        userData!['photoUrl'].toString().isEmpty)
+                    ? const Icon(Icons.person,
+                        size: 40, color: AppColors.darckbg)
+                    : null,
+              ),
               Text(
                 userData?['name'] ?? 'Loading...',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -45,7 +57,8 @@ class MyDrawer extends StatelessWidget {
                 style: TextStyle(color: AppColors.darckbg),
               ),
               onTap: () {
-                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) {
                   return HomePage();
                 }));
               },

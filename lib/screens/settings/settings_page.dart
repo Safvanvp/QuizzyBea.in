@@ -29,7 +29,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
   String _username = 'Loading...';
   String _email = '';
-  String? _profileImageUrl;
+  String _profileImageUrl = '';
 
   final imgbbService = ImgbbService();
 
@@ -52,37 +52,8 @@ class _SettingsPageState extends State<SettingsPage> {
         setState(() {
           _username = data?['name'] ?? 'No Name';
           _email = data?['email'] ?? user.email ?? '';
-          _profileImageUrl = data?['profileImageUrl'];
+          _profileImageUrl = data?['photoUrl'];
         });
-      }
-    }
-  }
-
-  Future<void> _pickAndUploadImage() async {
-    final picker = ImagePicker();
-
-    if (kIsWeb) {
-      final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-      if (pickedFile != null) {
-        final bytes = await pickedFile.readAsBytes();
-        try {
-          String imageUrl =
-              await imgbbService.uploadImageWeb(bytes, pickedFile.name);
-          // update UI with imageUrl ...
-        } catch (e) {
-          print('Image upload failed: $e');
-        }
-      }
-    } else {
-      final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-      if (pickedFile != null) {
-        final file = File(pickedFile.path);
-        try {
-          String imageUrl = await imgbbService.uploadImage(file);
-          // update UI with imageUrl ...
-        } catch (e) {
-          print('Image upload failed: $e');
-        }
       }
     }
   }
@@ -114,21 +85,16 @@ class _SettingsPageState extends State<SettingsPage> {
                 children: [
                   Stack(
                     children: [
-                      GestureDetector(
-                        onTap: _pickAndUploadImage,
-                        child: CircleAvatar(
-                          radius: 32,
-                          backgroundColor: Colors.deepPurple,
-                          backgroundImage: _profileImageUrl != null &&
-                                  _profileImageUrl!.isNotEmpty
-                              ? NetworkImage(_profileImageUrl!)
-                              : null,
-                          child: _profileImageUrl == null ||
-                                  _profileImageUrl!.isEmpty
-                              ? const Icon(Icons.person,
-                                  size: 30, color: Colors.white)
-                              : null,
-                        ),
+                      CircleAvatar(
+                        radius: 32,
+                        backgroundColor: Colors.deepPurple,
+                        backgroundImage: (_profileImageUrl.isNotEmpty)
+                            ? NetworkImage(_profileImageUrl)
+                            : null,
+                        child: (_profileImageUrl.isEmpty)
+                            ? const Icon(Icons.person,
+                                size: 32, color: Colors.white)
+                            : null,
                       ),
                       Positioned(
                         bottom: 0,
