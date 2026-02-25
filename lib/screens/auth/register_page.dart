@@ -7,53 +7,39 @@ import 'package:quizzybea_in/theme/app_colors.dart';
 import 'package:quizzybea_in/widgets/app_button.dart';
 import 'package:quizzybea_in/widgets/app_text_field.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegisterPageState extends State<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
+  final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _confirmController = TextEditingController();
   bool _isLoading = false;
 
   @override
   void dispose() {
+    _nameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
+    _confirmController.dispose();
     super.dispose();
   }
 
-  Future<void> _login() async {
+  Future<void> _register() async {
     if (!_formKey.currentState!.validate()) return;
     setState(() => _isLoading = true);
     try {
-      await AuthService.instance.signInWithEmailAndPassword(
-        _emailController.text.trim(),
-        _passwordController.text.trim(),
+      await AuthService.instance.signUpWithEmailAndPassword(
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
+        name: _nameController.text.trim(),
       );
-      if (mounted) context.go(AppRoutes.home);
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(e.toString().replaceAll('Exception: ', '')),
-            backgroundColor: AppColors.error,
-          ),
-        );
-      }
-    } finally {
-      if (mounted) setState(() => _isLoading = false);
-    }
-  }
-
-  Future<void> _googleSignIn() async {
-    setState(() => _isLoading = true);
-    try {
-      await AuthService.instance.signInWithGoogle();
       if (mounted) context.go(AppRoutes.home);
     } catch (e) {
       if (mounted) {
@@ -81,20 +67,30 @@ class _LoginPageState extends State<LoginPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Lottie.asset('Assets/lottie/login.json', height: 200),
+                Lottie.asset('Assets/lottie/login.json', height: 180),
                 const SizedBox(height: 8),
                 Text(
-                  'Welcome Back!',
+                  'Create Account',
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.displayMedium,
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Login to continue your quiz journey',
+                  'Join QuizzyBea and start your journey',
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 const SizedBox(height: 36),
+                AppTextField(
+                  controller: _nameController,
+                  hint: 'Full name',
+                  icon: Icons.person_rounded,
+                  validator: (v) {
+                    if (v == null || v.isEmpty) return 'Name is required';
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 16),
                 AppTextField(
                   controller: _emailController,
                   hint: 'Email address',
@@ -119,86 +115,43 @@ class _LoginPageState extends State<LoginPage> {
                     return null;
                   },
                 ),
-                const SizedBox(height: 8),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: TextButton(
-                    onPressed: () {},
-                    child: const Text('Forgot Password?'),
-                  ),
-                ),
                 const SizedBox(height: 16),
-                AppButton(
-                  label: 'Login',
-                  isLoading: _isLoading,
-                  onPressed: _login,
-                ),
-                const SizedBox(height: 24),
-                Row(
-                  children: [
-                    const Expanded(child: Divider(color: AppColors.divider)),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 12),
-                      child: Text(
-                        'or continue with',
-                        style: Theme.of(context).textTheme.bodySmall,
-                      ),
-                    ),
-                    const Expanded(child: Divider(color: AppColors.divider)),
-                  ],
-                ),
-                const SizedBox(height: 24),
-                _GoogleSignInButton(
-                  onTap: _isLoading ? null : _googleSignIn,
+                AppTextField(
+                  controller: _confirmController,
+                  hint: 'Confirm password',
+                  icon: Icons.lock_outline_rounded,
+                  obscureText: true,
+                  validator: (v) {
+                    if (v == null || v.isEmpty)
+                      return 'Please confirm your password';
+                    if (v != _passwordController.text)
+                      return 'Passwords do not match';
+                    return null;
+                  },
                 ),
                 const SizedBox(height: 32),
+                AppButton(
+                  label: 'Sign Up',
+                  isLoading: _isLoading,
+                  onPressed: _register,
+                ),
+                const SizedBox(height: 24),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      "Don't have an account?",
+                      'Already have an account?',
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
                     TextButton(
-                      onPressed: () => context.go(AppRoutes.register),
-                      child: const Text('Sign Up'),
+                      onPressed: () => context.go(AppRoutes.login),
+                      child: const Text('Login'),
                     ),
                   ],
                 ),
               ],
             ),
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class _GoogleSignInButton extends StatelessWidget {
-  final VoidCallback? onTap;
-  const _GoogleSignInButton({this.onTap});
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        height: 52,
-        decoration: BoxDecoration(
-          color: AppColors.bgCard,
-          borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: AppColors.divider),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset('Assets/images/google.png', height: 22),
-            const SizedBox(width: 12),
-            Text(
-              'Continue with Google',
-              style: Theme.of(context).textTheme.labelLarge,
-            ),
-          ],
         ),
       ),
     );

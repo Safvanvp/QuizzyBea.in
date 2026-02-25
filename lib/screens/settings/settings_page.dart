@@ -1,12 +1,8 @@
-import 'dart:io';
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:quizzybea_in/screens/settings/edit_profile_page.dart';
-import 'package:quizzybea_in/services/auth/auth_gate.dart';
-import 'package:quizzybea_in/services/auth/auth_services.dart';
-import 'package:quizzybea_in/services/image/image_services.dart';
+import 'package:go_router/go_router.dart';
+import 'package:quizzybea_in/core/app_routes.dart';
+import 'package:quizzybea_in/services/auth/auth_service.dart';
+import 'package:quizzybea_in/theme/app_colors.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -16,22 +12,8 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  final AuthServices _authServices = AuthServices();
-
-  void _logout(BuildContext context) async {
-    _authServices.signOut();
-    Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => const AuthGate()));
-  }
-
-  bool isDarkMode = false;
-  bool notificationsEnabled = true;
-
-  String _username = 'Loading...';
-  String _email = '';
-  String _profileImageUrl = '';
-
-  final imgbbService = ImgbbService();
+  Map<String, dynamic>? _userData;
+  bool _isLoading = true;
 
   @override
   void initState() {
@@ -40,181 +22,221 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   Future<void> _loadUserData() async {
-    final user = AuthServices().getCurrentUser();
-    if (user != null) {
-      final doc = await AuthServices()
-          .firestore
-          .collection('users')
-          .doc(user.uid)
-          .get();
-      if (doc.exists) {
-        final data = doc.data() as Map<String, dynamic>?;
-        setState(() {
-          _username = data?['name'] ?? 'No Name';
-          _email = data?['email'] ?? user.email ?? '';
-          _profileImageUrl = data?['photoUrl'];
-        });
-      }
-    }
+    setState(() => _isLoading = true);
+    final data = await AuthService.instance.getUserData();
+    if (mounted)
+      setState(() {
+        _userData = data;
+        _isLoading = false;
+      });
+  }
+
+  Future<void> _logout() async {
+    await AuthService.instance.signOut();
+    if (mounted) context.go(AppRoutes.introduction);
   }
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final textTheme = theme.textTheme;
+    final name = _userData?['name'] ?? 'Champion';
+    final email = _userData?['email'] ?? '';
+    final photoUrl = _userData?['photoUrl']?.toString() ?? '';
 
     return Scaffold(
+      backgroundColor: AppColors.bgDark,
       appBar: AppBar(
-        title: const Text('Settings'),
-        centerTitle: true,
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        foregroundColor: Colors.black,
+        title: const Text('Profile'),
+        automaticallyImplyLeading: false,
       ),
-      body: ListView(
-        padding: const EdgeInsets.all(16),
-        children: [
-          // Profile Card
-          Card(
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-            elevation: 4,
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Row(
-                children: [
-                  Stack(
+      body: _isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : ListView(
+              padding: const EdgeInsets.all(20),
+              children: [
+                // Profile header card
+                Container(
+                  padding: const EdgeInsets.all(24),
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      colors: AppColors.primaryGradient,
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Column(
                     children: [
                       CircleAvatar(
-                        radius: 32,
-                        backgroundColor: Colors.deepPurple,
-                        backgroundImage: (_profileImageUrl.isNotEmpty)
-                            ? NetworkImage(_profileImageUrl)
-                            : null,
-                        child: (_profileImageUrl.isEmpty)
-                            ? const Icon(Icons.person,
-                                size: 32, color: Colors.white)
+                        radius: 40,
+                        backgroundColor: Colors.white.withOpacity(0.2),
+                        backgroundImage:
+                            photoUrl.isNotEmpty ? NetworkImage(photoUrl) : null,
+                        child: photoUrl.isEmpty
+                            ? const Icon(Icons.person_rounded,
+                                size: 40, color: Colors.white)
                             : null,
                       ),
-                      Positioned(
-                        bottom: 0,
-                        right: 0,
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      const EditProfilePage()),
-                            ).then((_) => _loadUserData());
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Colors.deepPurple,
-                              shape: BoxShape.circle,
-                              border: Border.all(color: Colors.white, width: 2),
-                            ),
-                            padding: const EdgeInsets.all(4),
-                            child: const Icon(
-                              Icons.edit,
-                              size: 16,
-                              color: Colors.white,
-                            ),
-                          ),
+                      const SizedBox(height: 12),
+                      Text(
+                        name is String ? name : name.toString(),
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        email is String ? email : email.toString(),
+                        style: const TextStyle(
+                          color: Colors.white70,
+                          fontSize: 14,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      OutlinedButton.icon(
+                        onPressed: () => context
+                            .push(AppRoutes.editProfile)
+                            .then((_) => _loadUserData()),
+                        icon: const Icon(Icons.edit_rounded,
+                            color: Colors.white, size: 16),
+                        label: const Text('Edit Profile',
+                            style: TextStyle(color: Colors.white)),
+                        style: OutlinedButton.styleFrom(
+                          side: const BorderSide(color: Colors.white54),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)),
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(_username,
-                            style: textTheme.titleMedium
-                                ?.copyWith(fontWeight: FontWeight.bold)),
-                        const SizedBox(height: 4),
-                        Text(_email,
-                            style: textTheme.bodySmall
-                                ?.copyWith(color: Colors.grey[600])),
-                      ],
+                ),
+
+                const SizedBox(height: 28),
+
+                // Settings list
+                _SectionTitle('Account'),
+                const SizedBox(height: 8),
+                _SettingsCard(
+                  children: [
+                    _SettingsTile(
+                      icon: Icons.lock_rounded,
+                      label: 'Change Password',
+                      onTap: () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Coming soon…'),
+                          ),
+                        );
+                      },
                     ),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.edit),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const EditProfilePage()),
-                      ).then((_) => _loadUserData());
-                    },
-                  ),
-                ],
-              ),
-            ),
-          ),
-
-          const SizedBox(height: 24),
-
-          // Preferences
-          Card(
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-            elevation: 3,
-            child: Column(
-              children: [
-                SwitchListTile(
-                  title: const Text("Dark Mode"),
-                  value: isDarkMode,
-                  onChanged: (value) {
-                    setState(() => isDarkMode = value);
-                    // TODO: integrate dark mode logic
-                  },
-                  secondary: const Icon(Icons.dark_mode),
+                  ],
                 ),
-                const Divider(height: 0),
-                SwitchListTile(
-                  title: const Text("Enable Notifications"),
-                  value: notificationsEnabled,
-                  onChanged: (value) {
-                    setState(() => notificationsEnabled = value);
-                    // TODO: integrate notification logic
-                  },
-                  secondary: const Icon(Icons.notifications),
+
+                const SizedBox(height: 20),
+
+                _SectionTitle('Support'),
+                const SizedBox(height: 8),
+                _SettingsCard(
+                  children: [
+                    _SettingsTile(
+                      icon: Icons.info_outline_rounded,
+                      label: 'About QuizzyBea',
+                      onTap: () {},
+                    ),
+                    _SettingsTile(
+                      icon: Icons.policy_rounded,
+                      label: 'Privacy Policy',
+                      onTap: () {},
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 32),
+
+                // Logout
+                OutlinedButton.icon(
+                  onPressed: _logout,
+                  icon:
+                      const Icon(Icons.logout_rounded, color: AppColors.error),
+                  label: const Text('Log Out',
+                      style: TextStyle(color: AppColors.error)),
+                  style: OutlinedButton.styleFrom(
+                    minimumSize: const Size.fromHeight(52),
+                    side: const BorderSide(color: AppColors.error),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(14)),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Center(
+                  child: Text(
+                    'QuizzyBea v2.0.0',
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
                 ),
               ],
             ),
-          ),
+    );
+  }
+}
 
-          const SizedBox(height: 24),
+class _SectionTitle extends StatelessWidget {
+  final String text;
+  const _SectionTitle(this.text);
 
-          // Account Actions
-          Card(
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-            elevation: 3,
-            child: Column(
-              children: [
-                ListTile(
-                  leading: const Icon(Icons.lock),
-                  title: const Text('Change Password'),
-                  onTap: () {
-                    // TODO: Navigate to Change Password screen
-                  },
-                ),
-                const Divider(height: 0),
-                ListTile(
-                  leading: const Icon(Icons.logout, color: Colors.red),
-                  title:
-                      const Text('Logout', style: TextStyle(color: Colors.red)),
-                  onTap: () => _logout(context),
-                ),
-              ],
-            ),
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text.toUpperCase(),
+      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+            color: AppColors.textHint,
+            letterSpacing: 1.2,
+            fontWeight: FontWeight.w600,
           ),
-        ],
+    );
+  }
+}
+
+class _SettingsCard extends StatelessWidget {
+  final List<Widget> children;
+  const _SettingsCard({required this.children});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.bgCard,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.divider, width: 0.5),
       ),
+      child: Column(
+        children: children.expand((w) => [w, const Divider(height: 1)]).toList()
+          ..removeLast(),
+      ),
+    );
+  }
+}
+
+class _SettingsTile extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
+  const _SettingsTile({
+    required this.icon,
+    required this.label,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      leading: Icon(icon, color: AppColors.textSecondary, size: 22),
+      title: Text(label, style: Theme.of(context).textTheme.bodyLarge),
+      trailing: const Icon(Icons.chevron_right_rounded,
+          color: AppColors.textHint, size: 20),
+      onTap: onTap,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
     );
   }
 }

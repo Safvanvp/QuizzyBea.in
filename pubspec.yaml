@@ -1,62 +1,49 @@
 name: quizzybea_in
-description: "A new Flutter project."
+description: "QuizzyBea – A modern, engaging quiz app for champions."
 
-publish_to: 'none' 
+publish_to: 'none'
 
-
-version: 1.0.0+1
+version: 2.0.0+1
 
 environment:
   sdk: ^3.5.3
-
 
 dependencies:
   flutter:
     sdk: flutter
 
-
-
+  # UI
   cupertino_icons: ^1.0.8
-  smooth_page_indicator: 
-  lottie:
-  firebase_core:
-  firebase_auth:
-  google_sign_in:
-  cloud_firestore:
-  provider:
-  shimmer:
-  liquid_pull_to_refresh:
-  http:
-  image_picker: 
-  image_picker_web:  
-  google_nav_bar: 
+  google_fonts: ^6.2.1
+  lottie: ^3.1.3
+  shimmer: ^3.0.0
+  smooth_page_indicator: ^1.2.0+3
+  liquid_pull_to_refresh: ^3.0.1
 
+  # State management & routing
+  provider: ^6.1.2
+  go_router: ^14.6.1
+
+  # Firebase
+  firebase_core: ^3.10.0
+  firebase_auth: ^5.4.1
+  google_sign_in: ^6.2.2
+  cloud_firestore: ^5.5.1
+
+  # Image upload
+  http: ^1.2.2
+  image_picker: ^1.1.2
+  image_picker_web: ^4.0.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
-
   flutter_lints: ^4.0.0
 
-
 flutter:
-
-
   uses-material-design: true
 
- 
   assets:
     - Assets/images/
     - Assets/lottie/
     - Assets/productimages/
-
-
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
-
-

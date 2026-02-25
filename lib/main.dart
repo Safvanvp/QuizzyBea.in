@@ -1,33 +1,36 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter/services.dart';
+import 'package:quizzybea_in/core/app_router.dart';
 import 'package:quizzybea_in/firebase_options.dart';
-import 'package:quizzybea_in/models/cart/cart.dart';
-import 'package:quizzybea_in/services/auth/auth_gate.dart';
-
-import 'package:quizzybea_in/theme/colors.dart';
+import 'package:quizzybea_in/theme/app_theme.dart';
 
 void main() async {
-  await WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Lock to portrait mode for a consistent quiz experience
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+
+  runApp(const QuizzyBeaApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class QuizzyBeaApp extends StatelessWidget {
+  const QuizzyBeaApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => Cart(),
-      builder: (context, child)=>MaterialApp(
+    return MaterialApp.router(
       debugShowCheckedModeBanner: false,
-      title: 'Quizzy Beea.in',
-      theme: ThemeData(scaffoldBackgroundColor: AppColors.primary),
-      home: AuthGate(),
-    ),
+      title: 'QuizzyBea',
+      theme: AppTheme.darkTheme,
+      routerConfig: AppRouter.router,
     );
   }
 }
