@@ -2,7 +2,7 @@ class AppImages {
   static const String basePath = 'Assets/images/';
   static const String pngFormat = '.png';
 
-  static String logo = '${basePath}Quizzybeein$pngFormat';
+  static String logo = '${basePath}logo$pngFormat';
   static String cardBg1 = '${basePath}bg1$pngFormat';
   static String cardBg2 = '${basePath}bg2$pngFormat';
 

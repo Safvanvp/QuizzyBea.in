@@ -34,6 +34,7 @@ dependencies:
   http: ^1.2.2
   image_picker: ^1.1.2
   image_picker_web: ^4.0.0
+  flutter_native_splash: ^2.4.4
 
 dev_dependencies:
   flutter_test:
@@ -47,3 +48,10 @@ flutter:
     - Assets/images/
     - Assets/lottie/
     - Assets/productimages/
+
+flutter_native_splash:
+  color: "#0B0C19"
+  image: Assets/images/Quizzybeein.png
+  android_12:
+    color: "#0B0C19"
+    image: Assets/images/Quizzybeein.png

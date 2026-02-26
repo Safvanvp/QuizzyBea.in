@@ -15,6 +15,7 @@ class _LeaderboardPageState extends State<LeaderboardPage>
     with SingleTickerProviderStateMixin {
   List<LeaderboardEntry> _entries = [];
   bool _isLoading = true;
+  String? _errorMsg;
   int? _myRank;
 
   late final AnimationController _podiumController;
@@ -36,18 +37,41 @@ class _LeaderboardPageState extends State<LeaderboardPage>
   }
 
   Future<void> _load() async {
-    setState(() => _isLoading = true);
-    final results = await Future.wait([
-      LeaderboardService.instance.getLeaderboard(),
-      LeaderboardService.instance.getCurrentUserRank(),
-    ]);
-    if (mounted) {
-      setState(() {
-        _entries = results[0] as List<LeaderboardEntry>;
-        _myRank = results[1] as int?;
-        _isLoading = false;
-      });
-      _podiumController.forward(from: 0);
+    setState(() {
+      _isLoading = true;
+      _errorMsg = null;
+    });
+    try {
+      final entries = await LeaderboardService.instance.getLeaderboard();
+      debugPrint('[LeaderboardPage] Got ${entries.length} entries');
+
+      // Derive rank from the fetched list
+      int? myRank;
+      for (final e in entries) {
+        if (e.isCurrentUser) {
+          myRank = e.rank;
+          break;
+        }
+      }
+
+      if (mounted) {
+        setState(() {
+          _entries = entries;
+          _myRank = myRank;
+          _isLoading = false;
+        });
+        if (_entries.isNotEmpty) {
+          _podiumController.forward(from: 0);
+        }
+      }
+    } catch (e) {
+      debugPrint('[LeaderboardPage] Error: $e');
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+          _errorMsg = e.toString();
+        });
+      }
     }
   }
 
@@ -71,6 +95,62 @@ class _LeaderboardPageState extends State<LeaderboardPage>
                   childCount: 10,
                 ),
               )
+            else if (_errorMsg != null)
+              SliverFillRemaining(
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(32),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(Icons.error_outline_rounded,
+                            color: AppColors.error, size: 48),
+                        const SizedBox(height: 12),
+                        Text(
+                          'Failed to load leaderboard',
+                          style: Theme.of(context).textTheme.titleLarge,
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          _errorMsg!,
+                          textAlign: TextAlign.center,
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodySmall
+                              ?.copyWith(color: AppColors.textHint),
+                        ),
+                        const SizedBox(height: 20),
+                        ElevatedButton(
+                          onPressed: _load,
+                          child: const Text('Retry'),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              )
+            else if (_entries.isEmpty)
+              SliverFillRemaining(
+                child: Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(Icons.emoji_events_outlined,
+                          color: AppColors.textHint, size: 64),
+                      const SizedBox(height: 16),
+                      Text(
+                        'No quiz results yet!',
+                        style: Theme.of(context).textTheme.headlineMedium,
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        'Complete a quiz to appear on the leaderboard.',
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                    ],
+                  ),
+                ),
+              )
             else ...[
               if (_entries.length >= 3)
                 SliverToBoxAdapter(child: _buildPodium()),
@@ -92,7 +172,7 @@ class _LeaderboardPageState extends State<LeaderboardPage>
           ],
         ),
       ),
-      bottomSheet: _myRank != null ? _buildMyRankBar() : null,
+      bottomSheet: (!_isLoading && _myRank != null) ? _buildMyRankBar() : null,
     );
   }
 
@@ -128,7 +208,7 @@ class _LeaderboardPageState extends State<LeaderboardPage>
             ),
             const SizedBox(height: 6),
             Text(
-              'Top players ranked by XP',
+              'Top players ranked by score',
               style: Theme.of(context)
                   .textTheme
                   .bodyMedium
@@ -158,7 +238,8 @@ class _LeaderboardPageState extends State<LeaderboardPage>
       child: AnimatedBuilder(
         animation: _podiumController,
         builder: (_, __) {
-          final t = Curves.easeOutBack.transform(_podiumController.value);
+          final t = Curves.easeOutBack
+              .transform(_podiumController.value.clamp(0.0, 1.0));
           return Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: List.generate(3, (i) {
@@ -206,7 +287,7 @@ class _LeaderboardPageState extends State<LeaderboardPage>
             width: 32,
             child: Text(
               '#${e.rank}',
-              style: TextStyle(
+              style: const TextStyle(
                 color: AppColors.textHint,
                 fontWeight: FontWeight.w700,
                 fontSize: 13,
@@ -224,7 +305,7 @@ class _LeaderboardPageState extends State<LeaderboardPage>
               children: [
                 Text(
                   e.isCurrentUser ? '${e.name} (You)' : e.name,
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         color: e.isCurrentUser
                             ? AppColors.primary
                             : AppColors.textPrimary,
@@ -237,7 +318,7 @@ class _LeaderboardPageState extends State<LeaderboardPage>
               ],
             ),
           ),
-          // XP chip
+          // Score chip
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
             decoration: BoxDecoration(
@@ -245,7 +326,7 @@ class _LeaderboardPageState extends State<LeaderboardPage>
               borderRadius: BorderRadius.circular(20),
             ),
             child: Text(
-              '${e.totalXP} XP',
+              '${e.totalScore} pts',
               style: TextStyle(
                 color: e.level.color,
                 fontWeight: FontWeight.w700,
@@ -264,7 +345,7 @@ class _LeaderboardPageState extends State<LeaderboardPage>
     return Container(
       decoration: BoxDecoration(
         color: AppColors.bgCard,
-        border: Border(top: BorderSide(color: AppColors.divider)),
+        border: const Border(top: BorderSide(color: AppColors.divider)),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withAlpha(60),
@@ -369,7 +450,7 @@ class _PodiumPillar extends StatelessWidget {
         ),
         const SizedBox(height: 2),
         Text(
-          '${entry.totalXP} XP',
+          '${entry.totalScore} pts',
           style: TextStyle(
             color: entry.level.color,
             fontSize: 11,

@@ -24,6 +24,10 @@ class AppRouter {
         redirect: (context, state) {
           final user = FirebaseAuth.instance.currentUser;
           final loc = state.matchedLocation;
+
+          // Redirect bare "/" to splash
+          if (loc == '/') return AppRoutes.splash;
+
           final publicRoutes = {
             AppRoutes.login,
             AppRoutes.register,
@@ -71,10 +75,10 @@ class AppRouter {
                 path: AppRoutes.home,
                 builder: (c, s) => const HomePage(),
               ),
-              // GoRoute(
-              //   path: AppRoutes.leaderboard,
-              //   builder: (c, s) => const LeaderboardPage(),
-              // ),
+              GoRoute(
+                path: AppRoutes.leaderboard,
+                builder: (c, s) => const LeaderboardPage(),
+              ),
               GoRoute(
                 path: AppRoutes.history,
                 builder: (c, s) => const QuizHistoryPage(),
